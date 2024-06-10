@@ -3,12 +3,17 @@ package main
 import "fmt"
 
 func main() {
-	reverseString("hello world")
+	r := reverseString("hello world")
+	fmt.Println(r)
 }
 
 // time complexity O(n)
 // space complexity O(n)
-func reverseString(s string) {
+func reverseString(s string) string {
+	if len(s) < 1 {
+		return s
+	}
+
 	chars := make([]string, len(s))
 	for i, value := range s {
 		chars[i] = string(value)
@@ -17,5 +22,6 @@ func reverseString(s string) {
 	for i := len(chars) - 1; i >= 0; i-- {
 		result += chars[i]
 	}
-	fmt.Println(result)
+
+	return result
 }
