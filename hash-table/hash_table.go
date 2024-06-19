@@ -6,23 +6,40 @@ type HashValue interface {
 }
 
 type HashTable struct {
-	data map[int]HashValue
+	data map[int]map[string]HashValue
 	size int
 }
 
 func NewHashTable(size int) HashTable {
 	var ht HashTable
 	ht.size = size
-	ht.data = make(map[int]HashValue)
+	ht.data = map[int]map[string]HashValue{}
 	return ht
 }
 
 func (ht HashTable) set(p string, v HashValue) {
-	ht.data[ht.hash(p)] = v
+	hash := ht.hash(p)
+	if ht.data[hash] == nil {
+		myMap := map[string]HashValue{p: v}
+		ht.data[hash] = myMap
+	} else {
+		currentMap := ht.data[hash]
+		currentMap[p] = v
+		ht.data[hash] = currentMap
+	}
+
+	fmt.Println(ht)
 }
 
 func (ht HashTable) get(p string) HashValue {
-	return ht.data[ht.hash(p)]
+	var result HashValue
+	hash := ht.hash(p)
+	for index, value := range ht.data[hash] {
+		if index == p {
+			result = value
+		}
+	}
+	return result
 }
 
 func (ht HashTable) hash(key string) int {
